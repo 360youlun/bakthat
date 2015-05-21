@@ -9,6 +9,7 @@ import httplib
 
 import boto
 from boto.s3.key import Key
+from boto.s3.connection import S3Connection
 import math
 from boto.glacier.exceptions import UnexpectedHTTPResponseError
 from boto.exception import S3ResponseError
@@ -69,11 +70,14 @@ class S3Backend(BakthatBackend):
     def __init__(self, conf={}, profile="default"):
         BakthatBackend.__init__(self, conf, profile)
 
-        con = boto.connect_s3(self.conf["access_key"], self.conf["secret_key"])
-
         region_name = self.conf["region_name"]
+
         if region_name == DEFAULT_LOCATION:
             region_name = ""
+        if region_name == 'cn-north-1':
+            s3_host = 's3.cn-north-1.amazonaws.com.cn'
+
+        con = S3Connection(self.conf["access_key"], self.conf["secret_key"], host=s3_host)
 
         try:
             self.bucket = con.get_bucket(self.conf["s3_bucket"])
