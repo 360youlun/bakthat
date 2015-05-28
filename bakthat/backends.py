@@ -76,11 +76,10 @@ class S3Backend(BakthatBackend):
             region_name = ""
         if region_name.startswith('cn-'):
             s3_host = 's3.%s.amazonaws.com.cn' % region_name
+            con = S3Connection(self.conf["access_key"], self.conf["secret_key"], host=s3_host)
         else:
-            s3_host = 's3-%s.amazonaws.com' % region_name
-
-        con = S3Connection(self.conf["access_key"], self.conf["secret_key"], host=s3_host)
-
+            con = boto.connect_s3(self.conf["access_key"], self.conf["secret_key"])
+            
         try:
             self.bucket = con.get_bucket(self.conf["s3_bucket"])
         except S3ResponseError, e:
