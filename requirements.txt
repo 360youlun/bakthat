@@ -4,7 +4,7 @@ boto
 aaargh
 grandfatherson
 PyYaml
-byteformat==0.2a0
+byteformat==0.2a
 pycrypto
 requests
 sh
